@@ -34,6 +34,10 @@ defmodule Reader do
   def read_all_employees(filename \\ "employees.json") do
     case File.read(filename) do
       {:ok, contents} ->
+        # Example of how Jason.decode! works:
+        # If contents = '{"name": "John", "age": 30}'
+        # Jason.decode!(contents, keys: :atoms) returns:
+        # %{name: "John", age: 30}
         Jason.decode!(contents, keys: :atoms)
         |> Enum.map(&struct(Employee, &1))
       {:error, :enoent} -> []
