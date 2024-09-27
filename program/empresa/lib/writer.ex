@@ -1,4 +1,5 @@
 defmodule Writer do
+
   @moduledoc """
   This module provides functions for writing Employee data to a JSON file.
 
@@ -45,6 +46,67 @@ defmodule Writer do
   end
 
   @doc """
+  Removes an Employee from the JSON file by ID.
+
+  ## Parameters
+  - `id`: String, the ID of the Employee to remove
+  - `filename`: String, the name of the JSON file to write to (optional, default: "employees.json")
+
+  ## Returns
+  - `:ok` if the remove operation is successful
+  - `{:error, term()}` if an error occurs
+
+  ## Special Symbols
+  - `@doc`: Provides documentation for the function
+  - `@spec`: Specifies the function's type specification
+  - `def`: Defines a public function
+  - `\\\\`: Default argument separator
+  - `&`: Creates an anonymous function
+  - `&1`: Refers to the first argument of the anonymous function
+  - `|>`: The pipe operator
+
+  ## Examples
+      iex> Writer.remove_employee("1")
+      :ok
+
+  """
+  @spec remove_employee(String.t(), String.t()) :: :ok | {:error, term()}
+  def remove_employee(id, filename \\ "employees.json") do
+    employees = read_employees(filename)
+    updated_employees = Enum.reject(employees, &(&1.id == id))
+
+    json_data = Jason.encode!(updated_employees, pretty: true)
+    File.write(filename, json_data)
+  end
+
+  @doc """
+  Exports the employees to a YAML file.
+
+  ## Parameters
+  - `filename`: String, the name of the YAML file to write to (optional, default: "employees.yaml")
+
+  ## Returns
+  - `:ok` if the export operation is successful
+  - `{:error, term()}` if an error occurs
+
+  ## Special Symbols
+  - `@doc`: Provides documentation for the function
+  - `@spec`: Specifies the function's type specification
+  - `def`: Defines a public function
+  - `\\\\`: Default argument separator
+  - `|>`: The pipe operator
+
+  ## Examples
+      iex> Writer.export_employees_to_yaml("employees.yaml")
+      :ok
+  """
+  def export_employees_to_yaml(filename \\ "employees.json") do
+    employees = read_employees(filename)
+    yaml = Ymlr.document!(employees)
+    File.write("employees.yaml", yaml)
+  end
+
+  @doc """
   Reads existing employees from the JSON file.
 
   ## Parameters
@@ -72,6 +134,8 @@ defmodule Writer do
       {:error, :enoent} -> []
     end
   end
+
+
 
   @doc """
   Generates the next available ID for a new employee.

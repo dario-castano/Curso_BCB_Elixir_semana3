@@ -32,6 +32,7 @@ defmodule Empresa do
     #    @derive {Jason.Encoder, except: [:salary]}
     #
     @derive {Jason.Encoder, only: [:id, :name, :position, :email, :phone, :hire_date, :salary]}
+    @derive {Ymlr.Encoder, only: [:id, :name, :position, :email, :phone, :hire_date, :salary]}
     defstruct [:id, :name, :position, :email, :phone, :hire_date, :salary]
 
     # This defines a custom type 't' for the Employee struct:
